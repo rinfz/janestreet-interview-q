@@ -1,7 +1,7 @@
 import operator
+from decimal import Decimal
 from functools import reduce
 
-# TODO: change from float to Decimal
 # facts: List[Tuple[str, float, str]]
 #   e.g. ('m', 3.28, 'ft')
 # query: Tuple[float, str, str]
@@ -25,18 +25,16 @@ def solve(facts, src, target):
         for k in keys:
             return inner(k, (mul or []) + [facts[node]])
 
-    # TODO: we should terminate early if len(inner(n)) == 1
-    # NOTE: that would be definition order dependent
-    # NOTE: other things to consider might be int mul vs float mul (better convert)
-    # NOTE: the multiplier closest to 1 (i.e. src and target are close in magnitude)
     # find viable paths
     best_path = sorted(
         (
             viable for n in facts
             if n[0] == src and (viable := inner(n)) is not None
         ),
-        key=len,
+        # invert all with not because False => 0 and 0 sorts before 1
+        key=lambda x: (len(x), not all(isinstance(xx, int) for xx in x)),
     )
+    print(best_path)
 
     if not best_path:
         return None
@@ -51,13 +49,17 @@ def query(facts, q):
         return qty * result
 
 
-facts = preprocess([
-    ('m', 3.28, 'ft'),
-    ('ft', 12, 'in'),
-    ('in', 2.54, 'cm'),
-    ('hr', 60, 'min'),
-    ('min', 60, 'sec'),
-    ('m', 100, 'cm'),
-])
+if __name__ == '__main__':
+    facts = preprocess([
+        ('m', Decimal('3.28'), 'ft'),
+        ('ft', 12, 'in'),
+        ('in', Decimal('2.54'), 'cm'),
+        ('hr', 60, 'min'),
+        ('min', 60, 'sec'),
+        # example  (think of a real example?)
+        ('m', 10, 'tmp1'),
+        ('tmp1', 2, 'tmp2'),
+        ('tmp2', 5, 'cm'),
+    ])
 
-print(query(facts, (2, 'm', 'cm')))
+    print(query(facts, (2, 'm', 'cm')))
