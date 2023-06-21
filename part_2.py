@@ -24,10 +24,6 @@ def solve(facts, src, target):
         for k in keys:
             return inner(k, (mul or []) + [facts[node]])
 
-    # TODO: we should terminate early if len(inner(n)) == 1
-    # NOTE: that would be definition order dependent
-    # NOTE: other things to consider might be int mul vs float mul (better convert)
-    # NOTE: the multiplier closest to 1 (i.e. src and target are close in magnitude)
     # find viable paths
     best_path = sorted(
         (
@@ -50,13 +46,14 @@ def query(facts, q):
         return qty * result
 
 
-facts = preprocess([
-    ('m', 3.28, 'ft'),
-    ('ft', 12, 'in'),
-    ('in', 2.54, 'cm'),
-    ('hr', 60, 'min'),
-    ('min', 60, 'sec'),
-    ('m', 100, 'cm'),
-])
+if __name__ == '__main__':
+    facts = preprocess([
+        ('m', 3.28, 'ft'),
+        ('ft', 12, 'in'),
+        ('in', 2.54, 'cm'),
+        ('hr', 60, 'min'),
+        ('min', 60, 'sec'),
+        ('m', 100, 'cm'),
+    ])
 
-print(query(facts, (2, 'm', 'cm')))
+    print(query(facts, (2, 'm', 'cm')))
