@@ -13,8 +13,6 @@ def preprocess(facts):
     return result
 
 def solve(facts, src, target):
-    # NOTE: initially tried reducing mul on the fly, but
-    # TODO: recreate that version for video
     # we want to pick the most efficient relation if possible
     def inner(node, mul=None):
         if node not in facts:
@@ -61,4 +59,4 @@ facts = preprocess([
     ('m', 100, 'cm'),
 ])
 
-print(query(facts, (2, 'm', 'in')))
+print(query(facts, (2, 'm', 'cm')))
