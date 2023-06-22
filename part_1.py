@@ -35,13 +35,14 @@ def query(facts, q):
         return qty * result
 
 
-facts = preprocess([
-    ('m', 100, 'cm'), # move this to get different results
-    ('m', 3.28, 'ft'),
-    ('ft', 12, 'in'),
-    ('in', 2.54, 'cm'),
-    ('hr', 60, 'min'),
-    ('min', 60, 'sec'),
-])
+if __name__ == '__main__':
+    facts = preprocess([
+        ('m', 100, 'cm'), # move this to get different results
+        ('m', 3.28, 'ft'),
+        ('ft', 12, 'in'),
+        ('in', 2.54, 'cm'),
+        ('hr', 60, 'min'),
+        ('min', 60, 'sec'),
+    ])
 
-print(query(facts, (2, 'm', 'cm')))
+    print(query(facts, (2, 'm', 'cm')))
