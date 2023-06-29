@@ -33,6 +33,16 @@ def gen_query(facts0):
     return inner
 
 
+def direct_query(facts, q):
+    facts = parse(facts)
+    qty, *rest = q
+    key = tuple(rest)
+    if key not in facts:
+        return 'not convertible!'
+    else:
+        return qty * facts[key]
+
+
 if __name__ == '__main__':
     facts = preprocess([
         ('m', 3.28, 'ft'),
@@ -43,5 +53,8 @@ if __name__ == '__main__':
         ('min', 60, 'sec'),
     ])
 
-    parse(facts)
-    print(facts)
+    q = (2, 'm', 'cm')
+    iq = gen_query(facts.copy())
+    dq = direct_query
+    print(iq(0, q))
+    print(dq(facts.copy(), q))

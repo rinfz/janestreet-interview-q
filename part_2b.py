@@ -1,5 +1,4 @@
 import operator
-from decimal import Decimal
 from functools import reduce
 
 # facts: List[Tuple[str, float, str]]
@@ -51,15 +50,12 @@ def query(facts, q):
 
 if __name__ == '__main__':
     facts = preprocess([
-        ('m', Decimal('3.28'), 'ft'),
+        ('m', 3.28, 'ft'),
         ('ft', 12, 'in'),
-        ('in', Decimal('2.54'), 'cm'),
-        ('hr', 60, 'min'),
-        ('min', 60, 'sec'),
-        # example  (think of a real example?)
-        ('m', 10, 'tmp1'),
-        ('tmp1', 2, 'tmp2'),
-        ('tmp2', 5, 'cm'),
+        ('in', 2.54, 'cm'),
+        ('m', 10, 'diversion_1'),
+        ('diversion_1', 2, 'diversion_2'),
+        ('diversion_2', 5, 'cm'),
     ])
 
     print(query(facts, (2, 'm', 'cm')))

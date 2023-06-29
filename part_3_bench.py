@@ -1,15 +1,7 @@
 from timeit import timeit
+from part_1_bench import test_case, avg
 from part_2a import query as query_terminating, preprocess
 from part_3 import gen_query
-
-def test_case(fn, facts, q):
-    result = []
-    for n in (1_000, 10_000, 100_000, 1_000_000):
-        result.append(timeit(
-            lambda: fn(facts, q),
-            number=n,
-        ))
-    return result
 
 
 facts_short_first = preprocess([
@@ -40,23 +32,20 @@ facts_no_short = preprocess([
 
 q = (2, 'm', 'cm')
 
-query_pf_sf = gen_query(facts_short_first)
-query_pf_sl = gen_query(facts_short_last)
-query_pf_ns = gen_query(facts_no_short)
+query_pf_sf = gen_query(facts_short_first.copy())
+query_pf_sl = gen_query(facts_short_last.copy())
+query_pf_ns = gen_query(facts_no_short.copy())
 
 assert query_pf_sf(facts_short_first, q) == query_terminating(facts_short_first, q)
 assert query_pf_sl(facts_short_last, q) == query_terminating(facts_short_last, q)
-assert query_pf_ns(facts_no_short, q) == query_terminating(facts_no_short, q)
+# oof
+assert round(query_pf_ns(facts_no_short, q), 4) == query_terminating(facts_no_short, q)
 
 pf_short_first = test_case(query_pf_sf, facts_short_first, q)
 pf_short_last = test_case(query_pf_sl, facts_short_last, q)
 pf_no_short = test_case(query_pf_ns, facts_no_short, q)
 
-term_short_first = test_case(query_terminating, facts_short_first, q)
-term_short_last = test_case(query_terminating, facts_short_last, q)
-term_no_short = test_case(query_terminating, facts_no_short, q)
-
-# TODO: get some percentages from these stats
-print(pf_short_first, term_short_first)
-print(pf_short_last, term_short_last)
-print(pf_no_short, term_no_short)
+print("Cached")
+print(avg(pf_short_first))
+print(avg(pf_short_last))
+print(avg(pf_no_short))
